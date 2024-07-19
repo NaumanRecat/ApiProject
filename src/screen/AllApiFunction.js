@@ -44,4 +44,13 @@ export const myFetchGetRequest = async () => {
     const resJson = await response.json();
     return resJson;
   };
+
+  // Delete
+
+  export const myFetchDeleteRequest = async (id) => {
+    const response = await fetch('https://jsonplaceholder.typicode.com/posts/' + id, {
+      method: 'DELETE',
+    });
+    return;
+  }
     
