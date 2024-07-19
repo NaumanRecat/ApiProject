@@ -1,3 +1,7 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+
+
 // Signup
 export const myFetchPostSignupRequest = async (body) => {
     console.log('req sent',body);
@@ -25,3 +29,19 @@ export const myFetchPostSignupRequest = async (body) => {
       const resJson = await response.json();
       return resJson;
   };
+
+//   get
+
+export const myFetchGetRequest = async () => {
+    const userToken = await AsyncStorage.getItem('userToken');
+    const response = await fetch('https://django-blog-cyfp.vercel.app/api/blogposts', {
+        method: 'GET',
+        headers: {
+            'Authorization': `Token ${userToken}`,
+            'Content-Type': 'application/json'
+        }
+    });
+    const resJson = await response.json();
+    return resJson;
+  };
+    
