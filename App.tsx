@@ -1,11 +1,12 @@
 import React from "react";
-import { Text, View } from "react-native";
+import {SafeAreaView} from "react-native";
+import ScreenNavigator from "./src/navigator/ScreenNavigator";
 
 const App =()=>{
   return(
-    <View>
-      <Text>Nomi</Text>
-    </View>
+    <SafeAreaView style={{flex:1,backgroundColor:'#1E1E1E'}}>
+    <ScreenNavigator/>
+    </SafeAreaView>
   )
 }
 
