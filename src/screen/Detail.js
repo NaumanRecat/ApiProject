@@ -1,33 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { Button, Modal, ScrollView, Text, TouchableOpacity, View, TextInput, Image } from "react-native";
-import { myFetchDeleteRequest, myFetchGetRequest, myFetchAddData } from "./AllApiFunction";
-import { widthPercentageToDP as W, heightPercentageToDP as H } from 'react-native-responsive-screen';
+import React, {useState, useEffect} from "react";
+import { Button, Modal, Text, View, TextInput, TouchableOpacity, Image } from "react-native";
 import { launchImageLibrary } from 'react-native-image-picker';
+import { myFetchUpdateData } from "./AllApiFunction";
 
-const Dashboard = (props) => {
+const Detail = ({ route }) => {
+    const { item } = route.params;
 
-    const [data, setData] = useState([])
-    const [modalVisible, setModalVisible] = useState(false)
-
-    const [title, setTitle] = useState();
-    const [content, setContent] = useState();
-
+    const [modalVisible, setModalVisible] = useState(false);
+    const [title, setTitle] = useState('');
+    const [content, setContent] = useState('');
     const [image, setImage] = useState(null);
-
-    const GetData = async () => {
-        const response = await myFetchGetRequest();
-        console.log(response)
-        setData(response)
-    }
-
-    const DeleteData = async (id) => {
-        await myFetchDeleteRequest(id);
-        setData((prevData) => prevData.filter((item) => item.id !== id));
-    }
-
-    useEffect(() => {
-        GetData();
-    }, [])
 
     const pickImage = () => {
         launchImageLibrary({ mediaType: 'photo' }, response => {
@@ -46,7 +28,8 @@ const Dashboard = (props) => {
         });
     }
 
-    const AddNewData = async ()=>{
+    const UpdateData = async ()=>{
+
         const formData = new FormData();
         formData.append('title', title);
         formData.append('content', content);
@@ -60,42 +43,31 @@ const Dashboard = (props) => {
         }
 
         try{
-            const response = await myFetchAddData(formData);
-            console.log(response)
+            const response = await myFetchUpdateData(item?.id, formData)
+            console.log('Api Response', response)
 
-            if (response) {
-                console.log('Data added successfully:', response);
-                GetData();
+            if(response.id){
+                setTitle(response.title),
+                setContent(response.content)
                 setModalVisible(false);
             }
-        } catch(error){
-            alert('An error occurred. Please try again.');
-        }
 
+        }
+        catch(error){
+            console.error('Failed to update the item:');
+        }
     }
 
+
+
     return (
-        <ScrollView>
+        <View>
+            <Text> {item.id} </Text>
+            <Text>Title: {item.title}</Text>
+            <Text>Content: {item.content}</Text>
+            <Text>Published Date: {item.published_date}</Text>
+            <Button title="Update the Data" onPress={()=>setModalVisible(true)}/>
 
-            <View style={{ marginTop: H(5), marginBottom: H(5) }}><Button title="Entry New Data" onPress={() => setModalVisible(true)} /></View>
-
-            {data.map((item) => (
-                <View key={item.id} style={{ marginBottom: 5, marginTop: 1 }}>
-                    <TouchableOpacity onPress={()=>props.navigation.navigate('Detail', {item})} style={{
-                        padding: 10,
-                        borderWidth: 1,
-                        borderColor: '#ccc',
-                        borderRadius: 5,
-                        backgroundColor: 'pink',
-                    }}>
-                        <Text style={{ fontSize: 16 }}>Id: {item.id}</Text>
-                        <Text style={{ fontSize: 16 }}>Title: {item.title}</Text>
-                        <Text style={{ fontSize: 16 }}>Content: {item.content}</Text>
-                        <Text style={{ fontSize: 16 }}>Published Date: {item.published_date}</Text>
-                        <Button title="Delete" onPress={() => DeleteData(item.id)} />
-                    </TouchableOpacity>
-                </View>
-            ))}
             <Modal
                 animationType="slide"
                 transparent={true}
@@ -153,10 +125,7 @@ const Dashboard = (props) => {
                         value={content}
                         onChangeText={setContent}
                     />
-
                     <Button title="Pick an image" onPress={pickImage} />
-
-
                     {image && <Image source={{ uri: image.uri }} style={{
                         width: 100,
                         height: 100,
@@ -173,12 +142,10 @@ const Dashboard = (props) => {
                         }}
                         onPress={() => {
                             console.log("Save button pressed");
-                            AddNewData()
+                            UpdateData()
                         }}>
                         <Text style={{color: 'white',textAlign: 'center'}}>Save</Text>
                     </TouchableOpacity>
-
-
                     <TouchableOpacity style={{
                             backgroundColor: '#2196F3',
                             borderRadius: 5,
@@ -191,13 +158,10 @@ const Dashboard = (props) => {
                     >
                         <Text style={{color: 'white', textAlign: 'center'}}>Cancel</Text>
                     </TouchableOpacity>
-
-
                 </View>
-
             </Modal>
-        </ScrollView>
+        </View>
     )
 }
 
-export default Dashboard
+export default Detail

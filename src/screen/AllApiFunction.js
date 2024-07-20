@@ -69,5 +69,22 @@ export const myFetchGetRequest = async () => {
     const resJson = await response.json();
     return resJson;
   };
+
+  // UpdateData
+
+  export const myFetchUpdateData = async (id,formData) => {
+    console.log(id)
+    const userToken = await AsyncStorage.getItem('userToken');
+    const response = await fetch('https://django-blog-cyfp.vercel.app/api/blogposts/'+id, {
+        method: 'PATCH',
+        body: formData,
+        headers: {
+            'Authorization': `Token ${userToken}`,
+            // Note: 'Content-Type' should not be set here for multipart/form-data
+        },
+    });
+    const resJson = await response.json();
+    return resJson;
+  };
   
     
