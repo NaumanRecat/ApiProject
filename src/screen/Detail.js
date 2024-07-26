@@ -51,7 +51,6 @@ const Detail = ({ route }) => {
                 setContent(response.content)
                 setModalVisible(false);
             }
-
         }
         catch(error){
             console.error('Failed to update the item:');
