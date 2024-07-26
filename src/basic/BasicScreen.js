@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, FlatList, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Button, FlatList, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { Colors } from "react-native/Libraries/NewAppScreen";
 
 const BasicScreen = (props) => {
@@ -13,6 +13,9 @@ const BasicScreen = (props) => {
     const [email, setEmail] = useState('')
     const [Password, setPassword] = useState('')
     const [display, setDispaly] = useState(false)
+
+    const [loader, setLoader] = useState(false)
+
 
     const [flat, setFlat] = useState([
         {
@@ -48,6 +51,14 @@ const BasicScreen = (props) => {
         setEmail(""),
             setPassword(""),
             setDispaly(false)
+    }
+
+    const showloader =()=>{
+        setLoader(true);
+
+        setTimeout(() => {
+            setLoader(false)
+        }, 3000);
     }
 
     // useEffect(()=>{
@@ -111,15 +122,14 @@ const BasicScreen = (props) => {
             ))}
 
             <Button onPress={()=>setDispaly(!display)}  title={display ? 'Hide Toggle' : 'Show Toggle'}/>
-
             
             {
                 display ? <Application name={name} age={age} /> : null
 
             }
 
-           
-
+            <Button onPress={showloader} title="Show Loader"/>
+            <ActivityIndicator size={100} color={'red'} animating={loader} />
 
         </ScrollView>
     )
