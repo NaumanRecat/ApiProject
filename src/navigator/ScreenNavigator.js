@@ -8,6 +8,8 @@ import Detail from '../screen/Detail';
 import BasicScreen from '../basic/BasicScreen';
 import BasicScreen1 from '../basic/BasicScreen1';
 import BottonTabNavigator from './BottonTabNavigator';
+import BottomtopNavigator from './BottomtopNavigator';
+
 
 
 
@@ -17,7 +19,8 @@ const Stack = createNativeStackNavigator();
 const ScreenNavigator =()=>{
   return(
     <NavigationContainer>
-        <Stack.Navigator initialRouteName="BottonTabNavigator">
+        <Stack.Navigator initialRouteName="BottomtopNavigator">
+        <Stack.Screen name="BottomtopNavigator" component={BottomtopNavigator} options={{headerShown:false}}/> 
         <Stack.Screen name="BottonTabNavigator" component={BottonTabNavigator} options={{headerShown:false}}/> 
         <Stack.Screen name="BasicScreen1" component={BasicScreen1} options={{headerShown:false}}/> 
         <Stack.Screen name="BasicScreen" component={BasicScreen} options={{headerShown:false}}/> 
