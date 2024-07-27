@@ -6,6 +6,9 @@ import Login from '../screen/Login';
 import Dashboard from '../screen/Dashboard';
 import Detail from '../screen/Detail';
 import BasicScreen from '../basic/BasicScreen';
+import BasicScreen1 from '../basic/BasicScreen1';
+import BottonTabNavigator from './BottonTabNavigator';
+
 
 
 
@@ -14,7 +17,9 @@ const Stack = createNativeStackNavigator();
 const ScreenNavigator =()=>{
   return(
     <NavigationContainer>
-        <Stack.Navigator initialRouteName="BasicScreen">
+        <Stack.Navigator initialRouteName="BottonTabNavigator">
+        <Stack.Screen name="BottonTabNavigator" component={BottonTabNavigator} options={{headerShown:false}}/> 
+        <Stack.Screen name="BasicScreen1" component={BasicScreen1} options={{headerShown:false}}/> 
         <Stack.Screen name="BasicScreen" component={BasicScreen} options={{headerShown:false}}/> 
         <Stack.Screen name="Signup" component={Signup} options={{headerShown:false}}/> 
         <Stack.Screen name="Login" component={Login} options={{headerShown:false}}/> 

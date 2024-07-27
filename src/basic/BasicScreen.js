@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, Button, FlatList, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Button, FlatList, Platform, ScrollView, StatusBar, Text, TextInput, TouchableOpacity, View, Modal } from "react-native";
 import { Colors } from "react-native/Libraries/NewAppScreen";
 
 const BasicScreen = (props) => {
@@ -15,6 +15,12 @@ const BasicScreen = (props) => {
     const [display, setDispaly] = useState(false)
 
     const [loader, setLoader] = useState(false)
+    const [isModalVisible, setModalVisible] = useState(false);
+
+    const toggleModal = () => {
+        setModalVisible(!isModalVisible);
+      };
+    
 
 
     const [flat, setFlat] = useState([
@@ -53,7 +59,7 @@ const BasicScreen = (props) => {
             setDispaly(false)
     }
 
-    const showloader =()=>{
+    const showloader = () => {
         setLoader(true);
 
         setTimeout(() => {
@@ -66,10 +72,19 @@ const BasicScreen = (props) => {
     // },[])
 
 
+    const firstname = 'Nauman';
+    const lastname = 'Tariq Mehmood Imran';
 
 
     return (
         <ScrollView>
+
+            <StatusBar backgroundColor="orange" barStyle={'dark-content'} hidden={false} />
+
+        
+
+            <Button onPress={() => props.navigation.navigate('BasicScreen1', { firstname, lastname })} title="Passing Data Screen" />
+
             <TouchableOpacity><Text> Nomi Awan Working </Text></TouchableOpacity>
 
             <Button title="Button" onPress={() => setChange('Dynamic Data')} />
@@ -121,15 +136,73 @@ const BasicScreen = (props) => {
                 </View>
             ))}
 
-            <Button onPress={()=>setDispaly(!display)}  title={display ? 'Hide Toggle' : 'Show Toggle'}/>
-            
+            <Button onPress={() => setDispaly(!display)} title={display ? 'Hide Toggle' : 'Show Toggle'} />
+
             {
                 display ? <Application name={name} age={age} /> : null
 
             }
 
-            <Button onPress={showloader} title="Show Loader"/>
+            <Button onPress={showloader} title="Show Loader" />
             <ActivityIndicator size={100} color={'red'} animating={loader} />
+
+
+            {
+                Platform.OS === 'android' ? <View style={{ height: 100, width: 100, backgroundColor: 'orange', alignSelf: 'center' }}></View> : <View style={{ height: 100, width: 100, backgroundColor: 'green', alignSelf: 'center' }}></View>
+            }
+
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <Button title="Show Modal" onPress={toggleModal} />
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={isModalVisible}
+                    onRequestClose={toggleModal}
+                >
+                    <View
+                        style={{
+                            flex: 1,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                        }}
+                    >
+                        <View
+                            style={{
+                                margin: 20,
+                                backgroundColor: 'white',
+                                borderRadius: 10,
+                                padding: 35,
+                                alignItems: 'center',
+                                shadowColor: '#000',
+                                shadowOffset: {
+                                    width: 0,
+                                    height: 2,
+                                },
+                                shadowOpacity: 0.25,
+                                shadowRadius: 4,
+                                elevation: 5,
+                            }}
+                        >
+                            <Text
+                                style={{
+                                    fontSize: 20,
+                                    fontWeight: 'bold',
+                                    marginBottom: 10,
+                                }}
+                            >
+                                Hello!
+                            </Text>
+                            <Text>This is a simple modal.</Text>
+                            <Button title="Close" onPress={toggleModal} />
+                        </View>
+                    </View>
+                </Modal>
+            </View>
+
+            <Button title="Try Navigation" onPress={()=>props.navigation.navigate('BasicScreen1')}/>
+
+      
 
         </ScrollView>
     )
